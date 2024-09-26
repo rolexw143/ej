@@ -1,0 +1,66 @@
+// elExample.jsp code
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+ <meta charset="UTF-8">
+ <title>Expression Language Example</title>
+ </head>
+ <body>
+ <!-- Setting attributes using JSP -->
+ <%
+ request.setAttribute("name", "Riya Atkari");
+ session.setAttribute("userRole", "Admin");
+ application.setAttribute("appVersion", "1.0.0");
+ // Setting numbers for arithmetic operations
+ request.setAttribute("number1", 24);
+ request.setAttribute("number2", 6);
+ %>
+ <h2>Expression Language Example in JSP</h2>
+ <!-- Using Expression Language to display attributes -->
+ <p>Request Attribute (name): ${name}</p>
+ <p>Session Attribute (userRole): ${userRole}</p>
+ <p>Application Attribute (appVersion): ${appVersion}</p>
+ <!-- Arithmetic Operations using EL -->
+ <h3>Arithmetic Operations</h3>
+ <p>Number 1: ${number1}</p>
+ <p>Number 2: ${number2}</p>
+ <p>Sum: ${number1 + number2}</p>
+ <p>Difference: ${number1 - number2}</p>
+ <p>Product: ${number1 * number2}</p>
+ <p>Division: ${number1 / number2}</p>
+ <!-- Logical Operations using EL -->
+ <h3>Logical Operations</h3>
+ <p>${number1 < number2} (Is number1 less than number2?)</p>
+ <p>${number1 != number2} (Is number1 not equal to number2?)</p>
+ <p>${number1 >= 30} (Is number1 greater than or equal to 30?)</p>
+ <!-- Accessing Implicit Objects -->
+ <h3>Implicit Objects</h3>
+ <p>Request Method: ${pageContext.request.method}</p>
+ <p>Session ID: ${pageContext.session.id}</p>
+ <p>Context Path: ${pageContext.request.contextPath}</p>
+  <!--conditional operator -->
+  <h3>Conditional Operator</h3>
+      <p> The result of 10>2 is: "${(10>1)?'greater':'lesser'}"</p>
+    <!--Empty Operator-->
+    <h3>Empty operator</h3>
+    <p> The Value for the Empty operator is:: ${empty "txxt"}</p>
+     <!--relational Operator-->
+    <h3>Empty operator</h3>
+    10.0==10: ${10.0==10} <br>
+    10.0 eq 10: ${10.0 eq 10} <br>
+    ((20*10)!= 200): ${((20*10)!= 200)} <br>
+    3 ne 3: ${3 ne 3} <br>
+    3.2>=2: ${3.2>=2} <br>
+    3.2 ge 2: ${3.2 ge 2} <br>
+    2<3: ${2<3} <br>
+    4 lt 6: ${4 lt 6} <br>
+    2 <= 4: ${2 <= 4} <br>
+    4 le 2: ${4 le 2}
+
+    
+    
+
+ </body>
+</html>
