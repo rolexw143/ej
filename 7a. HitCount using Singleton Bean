@@ -1,0 +1,53 @@
+// 
+Q.7 a) Develop simple EJB application to demonstrate Servlet Hit count using Singleton 
+Session Beans.
+Step 1: Java Web-> web application -> Pract7AServletHitsSingltonApp -> finish.
+Step2: Create a Session Bean named as CountServletHitsBean→ Select Singleton →
+package name as ejb (do not select Local or Remote)
+Step 3: Create a Servlet File name ServletClient in the package name as servlet.
+Do not select the Deployment Discriptor file
+
+
+
+//ServletClient.java Code 
+package servlet;
+import ejb.CountServletHitsBean;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.ejb.EJB;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+@WebServlet(name = "ServletClient", urlPatterns = {"/ServletClient"})
+public class ServletClient extends HttpServlet 
+{
+ @EJB CountServletHitsBean obj;
+ @Override
+ protected void service (HttpServletRequest req, HttpServletResponse res) throws 
+ServletException, IOException
+ {
+ res.setContentType("text/html");
+ PrintWriter out=res.getWriter();
+ out.print("<b>Number of times this Servlet is accessed </b>: "+obj.getCount());
+ }
+}
+
+//CountServletHitBeans.java code
+
+
+package ejb;
+
+import javax.ejb.Singleton;
+
+
+@Singleton
+public class CountServletHitsBean {
+
+    private int hitCount;
+    public synchronized int getCount()
+    {
+        return hitCount++;
+    }
+}
