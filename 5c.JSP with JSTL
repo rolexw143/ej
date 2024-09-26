@@ -1,0 +1,138 @@
+//index.html code 
+
+<html>
+ <head>
+ <title>JSTL Core tags </title>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ </head>
+ <body>
+ <h3><a href="URLDemo.jsp">URL DEMO  </a></h3>
+ <h3><a href="welcome.jsp">Welcome Page </a></h3>
+ <h3><a href="income.jsp">Income</a></h3>
+ <h3><a href="list.jsp">List of Fruits</a></h3>
+  <h3><a href="Max.jsp">Compare Income </a></h3>
+  <h3><a href="square.jsp">Square of numbers</a></h3>
+ </body>
+</html> 
+
+//URlDemo.jsp code
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <title>JSP Page</title>
+ </head>
+ <body>
+     <c:url value="/index.html"/>
+    
+
+ </body>
+</html>
+
+//welcome.jsp code 
+
+
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <title>JSP Page</title>
+ </head>
+ <body>
+ <c:out value="${'Welcome to Varad Page '}"/>
+ </body>
+</html>
+
+//income.jsp code 
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <title>JSTL-if Example</title>
+ </head>
+ <body>
+ <c:set var="income" scope="session" value="${4000*7}"/>
+ <c:if test="${income > 8000}">
+ <p>Varad Income is: <c:out value="${income}"/></p>
+ </c:if>
+ </body>
+</html>
+
+//list.jsp code 
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>JSTL - ForEach Example</title>
+</head>
+<body>
+ <c:set var="fruits" value="['Apple', 'Banana', 'Cherry']" />
+ 
+ <h3>List of Fruits:</h3>
+ <ul>
+ <!-- Iterating through the list of fruits -->
+ <c:forEach var="fruit" items="${fruits}">
+ <li>${fruit}</li>
+ </c:forEach>
+ </ul>
+</body>
+</html
+
+//MAx.jsp code
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <title>JSTL Conditional Example</title>
+ </head>
+ <body>
+ <c:set var="income" value="${2000*4}" /> 
+ Varad Income is: <c:out value="${income}" />
+<%--JSTL provides conditional logic< using <c:choose>, which works like an 
+if-else statemen--%>
+ <c:choose>
+ <c:when test="${income <= 1000}">
+ Income is not good
+ </c:when>
+ <c:when test="${income > 10000}">
+ Income is very good
+ </c:when>
+ <c:otherwise>
+ Income is undetermined
+ </c:otherwise>
+ </c:choose>
+ </body>
+</html>
+
+//square.jsp code 
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <title>JSP Page</title>
+ </head>
+ <body>
+ <c:forEach begin="1" end="10" var="i">
+ The Square of <c:out value="${i}=${i*i}"/><br>
+ </c:forEach>
+ </body> 
+</html>
