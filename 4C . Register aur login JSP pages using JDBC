@@ -1,0 +1,92 @@
+//Html code 
+<html>
+ <body>
+ <!--old user will be pass to validate login details-->
+ <form action="Login.jsp">
+ Enter a Username: <input type="text" name="u1"><br>
+ Enter a Password: <input type="password" name="p1"><br>
+ <input type="submit" value="Sign in">
+ <a href="register.html">New User <br>
+ </form>
+ </body>
+</html>
+
+//Login.jsp code 
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import = "java.sql.*"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <%
+ try{
+ Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+ Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/bscit","root","root");
+ PreparedStatement ps = con.prepareStatement("select * from register where username=? and password=?");
+ ps.setString(1,request.getParameter("u1"));
+ ps.setString(2,request.getParameter("p1"));
+ ResultSet rs=ps.executeQuery();
+ if(rs.next())
+ {
+ out.println("<h1> Valid Password or Username </h1>");
+ }
+ else
+ {
+ out.println("<h1> InValid Password or Username </h1>");
+ }
+ }catch(Exception ex) {
+ out.println(ex.getMessage());
+ }
+ %>
+        
+    </body>
+</html>
+
+//register.html code 
+
+<html><head><title>Registration Page</title></head>
+<body>
+<form action="Register.jsp" >
+<H1>Welcome to Registration page</H1>
+Enter User Name <input type="text" name="name"><br>
+Enter Password <input type="password" name="pass"><br>
+Enter Email <input type="text" name="email" ><br>
+Enter Country <input type="text" name="country" ><br>
+<input type="reset" ><input type="submit" value="REGISTER" >
+</form>
+</body>
+</html>
+
+//Register.jsp code 
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*"%>
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF8">
+ <title>JSP Page</title>
+ </head>
+ <body>
+ <%
+ try{
+ Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+ Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/bscit","root","root");
+ PreparedStatement ps = con.prepareStatement("insert into register values(?,?,?,?)");
+ ps.setString(1,request.getParameter("name"));
+ ps.setString(2,request.getParameter("pass"));
+ ps.setString(3,request.getParameter("email"));
+ ps.setString(4,request.getParameter("country"));
+ ps.executeUpdate();
+ con.close();
+ response.sendRedirect("index.html");
+ }catch(Exception ex) {
+ out.println(ex.getMessage());
+ }
+ %>
+ </body>
+</html>
