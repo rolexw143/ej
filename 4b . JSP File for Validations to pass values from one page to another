@@ -1,0 +1,93 @@
+//index.html code 
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Validate JSP Page</title>
+</head>
+<body>
+<form action="Validate.jsp">
+    Enter Your Name:- <input type="text" name="name" ><br>
+Enter Your Age:- <input type="text" name="age" ><br> 
+Select Hobbies:-
+<input type="checkbox" name="hob" value="Singing">Singing
+<input type="checkbox" name="hob" value="Reading">Reading Books
+<input type="checkbox" name="hob" value="Football">Playing Football<br> 
+Enter E-mail:- <input type="text" name="email" ><br>
+Select Gender:-
+<input type="radio" name="gender" value="male">Male
+<input type="radio" name="gender" value="female">Female
+<input type="radio" name="gender" value="other">Other<br>
+<input type="hidden" name="error" value="">
+<input type="submit" value="Submit Form">
+</form>
+</body>
+</html>
+
+//validate .jsp code 
+
+<%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<!DOCTYPE html>
+<html>
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+ <title>JSP Page</title>
+ </head>
+ <body>
+ <%
+ String name = request.getParameter("name");
+ String age = request.getParameter("age");
+ String[] hobbies = request.getParameterValues("hob"); // Handle multiple hobbies
+ String email = request.getParameter("email");
+ String gender = request.getParameter("gender");
+ String errormsg = "";
+ // Email validation pattern
+ String emailPattern = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+ // Check if name is empty
+ if (name == null || name.trim().equals("")) {
+ errormsg += "Please, Provide your Name <br>";
+ }
+ // Check if age is empty
+ if (age == null || age.trim().equals("")) {
+ errormsg += "Please, Provide your Age <br>";
+ } else {
+ // Check if age is a valid number
+ try {
+ int ageValue = Integer.parseInt(age);
+ if (ageValue <= 0) {
+ errormsg += "Age must be a positive number<br>";
+ }
+ } catch (NumberFormatException ex) {
+ errormsg += "Invalid Age<br>";
+ }
+ }
+ // Check if email is provided and valid
+ if (email == null || email.trim().equals("")) {
+ errormsg += "Please, Provide your Email <br>";
+ } else if (!email.matches(emailPattern)) {
+ errormsg += "Invalid Email format<br>";
+ }
+ // If there are errors, display them
+ if (!errormsg.trim().equals("")) {
+ out.println(errormsg);
+ } else {
+ // No errors, display the submitted information
+ out.println("<h2>Your Entered Information</h2>");
+ out.println("Name: " + name + "<br>");
+ out.println("Age: " + age + "<br>");
+ // Display selected hobbies
+ out.print("Hobbies: ");
+ if (hobbies != null) {
+ for (String hob : hobbies) {
+ out.print(hob + " ");
+ }
+ } else {
+ out.print("Not provided");
+ }
+ out.println("<br>");
+ out.println("Email: " + (email != null ? email : "Not provided") + "<br>");
+ out.println("Gender: " + (gender != null ? gender : "Not provided") + "<br>");
+ }
+%>
+ </body>
+</html>
