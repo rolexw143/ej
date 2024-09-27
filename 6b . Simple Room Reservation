@@ -1,0 +1,223 @@
+Q.6 b) Develop a Simple Room Reservation System Application Using EJB.
+Step 1: Create a session bean named as RoomBean in the package named ejb. Select the option 
+Stateless and click on Local Interface. Here you will find two files created in the ejb package 
+named as RoomBean.java and RoomBeanLocal.java
+Step 2: Create a Servlet file named as RoomClient. Do not click on web.xml (Deployment 
+Descriptor)
+
+
+//index.html code 
+
+<!DOCTYPE html>
+<html>
+ <head>
+ <title>Room Reservation System</title>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ </head>
+ <body>
+ <form action="RoomClient" method="post">
+ <br> No of Rooms <input type="text" name="t1">
+ <br> <input type="submit" name="btn" value="CheckIN">
+ <br> <input type="submit" name="btn" value="CheckOUT">
+ </form>
+ </body>
+</html>
+
+
+//roombean.java code 
+
+
+package ejb;
+import java.sql.*;
+
+import javax.ejb.Stateless;
+
+
+@Stateless
+public class RoomBean implements RoomBeanLocal {
+    
+    
+ public int checkin(int no) 
+ {
+ try
+ {
+ Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+ Connection con = 
+DriverManager.getConnection("jdbc:derby://localhost:1527/roomdb","root","root");
+ String sql1="select * from room";
+ Statement st=con.createStatement();
+ ResultSet rs=st.executeQuery(sql1);
+ rs.next();
+ int total=rs.getInt(1);
+ int occ=rs.getInt(2);
+ int free=total-occ;
+ System.out.println(total);
+ System.out.println(free);
+ if(free>=no)
+ {
+ String sql2="update room set occ=?";
+ PreparedStatement ps=con.prepareStatement(sql2);
+ ps.setInt(1, occ+no);
+ int rse=ps.executeUpdate();
+ return rse;
+ }
+ else
+ {
+ return 0;
+ }
+ }
+ catch(Exception e)
+ {
+ return 0;
+ }
+ }
+
+ public int checkout(int no) 
+ {
+ try
+ {
+ Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+ Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/roomdb","root","root");
+ String sql1="select * from room";
+ Statement st=con.createStatement();
+ ResultSet rs=st.executeQuery(sql1);
+ rs.next();
+ int total=rs.getInt(1);
+ int occ=rs.getInt(2);
+ if(occ>=0)
+ {
+ String sql2="update room set occ=?";
+ PreparedStatement ps=con.prepareStatement(sql2);
+ ps.setInt(1, occ-no);
+ int rse=ps.executeUpdate();
+ return rse;
+ }
+ else
+ return 0;
+ }
+ catch(Exception e)
+ {
+ return 0;
+ }
+ }
+
+
+
+  
+}
+
+//rommbeanlocal.java coe 
+
+package ejb;
+
+import javax.ejb.Local;
+
+
+@Local
+public interface RoomBeanLocal {
+    public int checkin(int no);
+    public int checkout(int no);
+    
+}
+
+
+//RoomClient.java
+
+
+
+package mypack;
+
+import java.io.*;
+
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+import ejb.RoomBeanLocal;
+import javax.ejb.EJB;
+
+
+@WebServlet(name = "RoomClient", urlPatterns = {"/RoomClient"})
+public class RoomClient extends HttpServlet {
+     @EJB RoomBeanLocal obj;
+ 
+
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out=response.getWriter();
+        try  {
+            int no=Integer.parseInt(request.getParameter("t1"));
+ String b=request.getParameter("btn");
+ int rse=0;
+ if(b.equals("CheckIN"))
+ {
+ rse=obj.checkin(no);
+ if(rse==1)
+ out.println(no+" rooms check-in");
+ }
+ if(b.equals("CheckOUT"))
+ {
+ rse=obj.checkout(no);
+ if(rse==1)
+ out.println(no+"rooms check-out");
+ }
+ if(rse==0)
+ {
+ out.println("not Possible to do Check In/Out");
+ out.println("<br><br><a href=index.html> Back </a>");
+ }
+ }
+        finally
+ {
+   out.close();
+ }
+
+            
+           
+        }
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
+
+
