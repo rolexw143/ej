@@ -3,7 +3,7 @@ index.html
 <head><title>Cookie Demo</title></head>
 <body>
 <form action="Page1" >
-Enter Your Name <input type="text" name="txtName"><br>
+Enter Your Name <input type="text" name="txtName"><br>s
 <input type="submit" value="~~~ Click to Enter ~~~">
 </form>
 </body>
