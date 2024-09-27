@@ -1,0 +1,116 @@
+.7 c) Develop simple Marks Entry Application to demonstrate accessing Database 
+using EJB.
+Step 1: Create web application as pract7CMarksApp.
+Step 2: Create database marksdb
+Step 3: Create tables marks in marksdb database as:
+create table marks (id int primary key auto_increment, sname varchar(35), marks1 int, 
+marks2 int, marks3 int);
+Step 4: create stateful java bean as 
+select source package -> session bean -> class name -> MarksEntryBean -> package -> 
+ejb -> bean type-> stateful -> don’t select Local / Remote -> finish
+
+
+
+//index.jsp code 
+<%-- 
+    Document   : Index
+    Created on : 27 Sep, 2024, 11:45:55 AM
+    Author     : theva
+--%>
+
+<%@page import="javax.naming.InitialContext"%>
+<%@page import="ejb.MarksEntryBean"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+
+ <jsp:useBean id="marksObj" scope="request" class="ejb.MarksEntryBean">
+ </jsp:useBean>
+<%
+    if(request.getParameter("InsertMarks")!= null){
+        String sname;
+        int marks1, marks2, marks3;
+        sname = request.getParameter("sname");
+        marks1 = Integer.parseInt(request.getParameter("m1"));
+        marks2 = Integer.parseInt(request.getParameter("m2"));
+        marks3 = Integer.parseInt(request.getParameter("m3"));
+        marksObj.addMarks(sname,marks1,marks2,marks3);
+        out.println("Marks entered successfully..!!!");
+    }
+    
+%>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <h2> Enter Details </h2>
+        <form name="result" method="post">
+            Enter Students name: <input type="text" name="sname"/><br>
+            Enter Subject 1 marks: <input type="text" name="m1"/><br>
+            Enter Subject 2 marks: <input type="text" name="m2"/><br>
+            Enter Subject 3 marks: <input type="text" name="m3"/><br>
+            <input type="submit" name="InsertMarks"/><br>
+        </form>
+    </body>
+</html>
+
+
+//MarksEntryBEan.javva code 
+
+<%-- 
+    Document   : Index
+    Created on : 27 Sep, 2024, 11:45:55 AM
+    Author     : theva
+--%>
+
+<%@page import="javax.naming.InitialContext"%>
+<%@page import="ejb.MarksEntryBean"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+
+ <jsp:useBean id="marksObj" scope="request" class="ejb.MarksEntryBean">
+ </jsp:useBean>
+<%
+    if(request.getParameter("InsertMarks")!= null){
+        String sname;
+        int marks1, marks2, marks3;
+        sname = request.getParameter("sname");
+        marks1 = Integer.parseInt(request.getParameter("m1"));
+        marks2 = Integer.parseInt(request.getParameter("m2"));
+        marks3 = Integer.parseInt(request.getParameter("m3"));
+        marksObj.addMarks(sname,marks1,marks2,marks3);
+        out.println("Marks entered successfully..!!!");
+    }
+    
+%>
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <h2> Enter Details </h2>
+        <form name="result" method="post">
+            Enter Students name: <input type="text" name="sname"/><br>
+            Enter Subject 1 marks: <input type="text" name="m1"/><br>
+            Enter Subject 2 marks: <input type="text" name="m2"/><br>
+            Enter Subject 3 marks: <input type="text" name="m3"/><br>
+            <input type="submit" name="InsertMarks"/><br>
+        </form>
+    </body>
+</html>
+
+
+
+// sql command
+
+create table room(
+id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+Sname varchar(100),
+marks1 int,
+marks2 int,
+marks3 int
+)
