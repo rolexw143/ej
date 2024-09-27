@@ -1,0 +1,184 @@
+Q.6 c) Develop simple shopping cart application using EJB [Stateful Session Bean].
+Step 1: creating application File -> new project-> java web->web application -> 
+Prac6CShoppingCartApp -> select Use dedicated folder for storing libraries -> finish
+Step 2: Creating a stateful session bean Source package -> new -> other -> enterprise java beans -
+> session bean -> next -> new session bean -> ejb name: ->ShoppingCart -> package: -> ejb -> 
+session type option -> Stateful -> finish.
+Step 3: creating a web client using index.jsp Right click on wewb pages -> new -> JSP -> filename -> 
+index -> finish.
+Step 4: Create database and database table Services -> create database -> cartdb ->select cartdb -
+> right click -> create table -> cart -> UserName varchar 35 ItemName varchar 50 Finish.
+Step 5. Add mysql connector to the library under project tab.
+Step 6: build and run the application
+
+
+//index.jsp code 
+
+
+
+<%-- 
+    Document   : index
+    Created on : 26 Sep, 2024, 11:41:51 AM
+    Author     : theva
+--%>
+
+<%@page import="java.util.Iterator, java.util.List, javax.naming.InitialContext, ejb.ShoppingCart"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%--<%!
+    private static ShoppingCart cart;
+    public void jspInit(){
+        try{
+            InitialContext ic = new InitialContext();
+            cart = (ShoppingCart)ic.lookup("java.global/ShoppingCartApp/ShoppingCart");
+        }catch(Exception e){
+            System.out.println("Could not create cart bean. " + e.getMessage());
+        }
+    }
+%>--%>
+
+<jsp:useBean id="obj" scope="request" class="ejb.ShoppingCart">
+</jsp:useBean>
+<%
+    if(request.getParameter("txtCustomerName") != null){
+        obj.initialize(request.getParameter("txtCustomerName"));
+    }else{
+        obj.initialize("Guest");
+    }
+    
+    if(request.getParameter("btnRmvBook") != null){
+        String books[] = request.getParameterValues("chkBook");
+        if(books != null){
+            for(int i = 0; i < books.length; i++){
+                obj.removeBook(books[i]);
+            }
+        }
+    }
+    
+    if(request.getParameter("btnAddBook") != null){
+        String books[] = request.getParameterValues("chkBook");
+        if(books != null){
+            for(int i = 0; i < books.length; i++){
+                obj.addBook(books[i]);
+            }
+        }
+    }
+%>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Shopping Cart</title>
+    </head>
+    <body style="background-color: pink;">
+        <h1 style="text-align: center;">Books For Sale</h1><br>
+        <form method="post">
+            Customer Name: <input type="text" name="txtCustomerName" value=<%= request.getParameter("txtCustomerName")%> /><br>
+            <b>Book Titles</b><br>
+            <input type="checkbox" name="chkBook" value="Struts 2.0 For Beginners">Struts 2.0 For Beginners<br>
+            <input type="checkbox" name="chkBook" value="Oracle 11g For Professionals">Oracle 11g For Professionals<br>
+            <input type="checkbox" name="chkBook" value="Hibernate 3 For Beginners">Hibernate 3 For Beginners<br>
+            <input type="checkbox" name="chkBook" value="Java Persistence API In EJB 3 For Beginners">Java Persistence API In EJB 3 For Beginners<br>
+            <br>
+            <input type='submit' value='Add To My Basket' name='btnAddBook'>
+            <input type='submit' value='Remove From My Basket' name='btnRmvBook'><br><br><br>
+            <%
+                if(obj!=null){
+                    out.print("<b> Basket </b><br>");
+                    List<String> bookList = obj.getContents();
+                    Iterator iterator = bookList.iterator();
+                    while(iterator.hasNext()){
+                        String title = (String)iterator.next();
+                        %>
+                        <%=title %><br>
+                        <%
+                    }
+                }
+                %>
+        </form>
+    </body>
+</html>
+
+
+//Shoppingcart.java code
+
+<%-- 
+    Document   : index
+    Created on : 26 Sep, 2024, 11:41:51 AM
+    Author     : theva
+--%>
+
+<%@page import="java.util.Iterator, java.util.List, javax.naming.InitialContext, ejb.ShoppingCart"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<%--<%!
+    private static ShoppingCart cart;
+    public void jspInit(){
+        try{
+            InitialContext ic = new InitialContext();
+            cart = (ShoppingCart)ic.lookup("java.global/ShoppingCartApp/ShoppingCart");
+        }catch(Exception e){
+            System.out.println("Could not create cart bean. " + e.getMessage());
+        }
+    }
+%>--%>
+
+<jsp:useBean id="obj" scope="request" class="ejb.ShoppingCart">
+</jsp:useBean>
+<%
+    if(request.getParameter("txtCustomerName") != null){
+        obj.initialize(request.getParameter("txtCustomerName"));
+    }else{
+        obj.initialize("Guest");
+    }
+    
+    if(request.getParameter("btnRmvBook") != null){
+        String books[] = request.getParameterValues("chkBook");
+        if(books != null){
+            for(int i = 0; i < books.length; i++){
+                obj.removeBook(books[i]);
+            }
+        }
+    }
+    
+    if(request.getParameter("btnAddBook") != null){
+        String books[] = request.getParameterValues("chkBook");
+        if(books != null){
+            for(int i = 0; i < books.length; i++){
+                obj.addBook(books[i]);
+            }
+        }
+    }
+%>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Shopping Cart</title>
+    </head>
+    <body style="background-color: pink;">
+        <h1 style="text-align: center;">Books For Sale</h1><br>
+        <form method="post">
+            Customer Name: <input type="text" name="txtCustomerName" value=<%= request.getParameter("txtCustomerName")%> /><br>
+            <b>Book Titles</b><br>
+            <input type="checkbox" name="chkBook" value="Struts 2.0 For Beginners">Struts 2.0 For Beginners<br>
+            <input type="checkbox" name="chkBook" value="Oracle 11g For Professionals">Oracle 11g For Professionals<br>
+            <input type="checkbox" name="chkBook" value="Hibernate 3 For Beginners">Hibernate 3 For Beginners<br>
+            <input type="checkbox" name="chkBook" value="Java Persistence API In EJB 3 For Beginners">Java Persistence API In EJB 3 For Beginners<br>
+            <br>
+            <input type='submit' value='Add To My Basket' name='btnAddBook'>
+            <input type='submit' value='Remove From My Basket' name='btnRmvBook'><br><br><br>
+            <%
+                if(obj!=null){
+                    out.print("<b> Basket </b><br>");
+                    List<String> bookList = obj.getContents();
+                    Iterator iterator = bookList.iterator();
+                    while(iterator.hasNext()){
+                        String title = (String)iterator.next();
+                        %>
+                        <%=title %><br>
+                        <%
+                    }
+                }
+                %>
+        </form>
+    </body>
+</html>
